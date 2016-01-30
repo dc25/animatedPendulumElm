@@ -14,7 +14,7 @@ type alias Model =
   }
 
 init =
-  { angle = pi / 2
+  { angle = 3 * pi / 4
   , angVel = 0.0
   , length = 2
   , gravity = -9.81
