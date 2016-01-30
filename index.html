@@ -5567,14 +5567,15 @@ Elm.Main.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Time = Elm.Time.make(_elm);
    var _op = {};
-   var init = {angle: $Basics.pi / 2,angVel: 0.0,length: 5,gravity: -9.81};
+   var init = {angle: $Basics.pi / 2,angVel: 0.0,length: 2,gravity: -9.81};
    var Model = F4(function (a,b,c,d) {    return {angle: a,angVel: b,length: c,gravity: d};});
-   var scale = 40;
+   var scale = 100;
    var view = function (model) {
-      var endPoint = {ctor: "_Tuple2",_0: 0,_1: (0 - scale) * model.length};
+      var endPoint = {ctor: "_Tuple2",_0: 0,_1: scale * model.length};
       var pendulum = $Graphics$Collage.group(_U.list([A2($Graphics$Collage.traced,
                                                      _U.update($Graphics$Collage.defaultLine,{width: 2,color: $Color.red}),
                                                      A2($Graphics$Collage.segment,{ctor: "_Tuple2",_0: 0,_1: 0},endPoint))
+                                                     ,A2($Graphics$Collage.filled,$Color.blue,$Graphics$Collage.circle(8))
                                                      ,A2($Graphics$Collage.move,
                                                      endPoint,
                                                      A2($Graphics$Collage.filled,$Color.green,$Graphics$Collage.circle(5)))]));
@@ -5582,7 +5583,7 @@ Elm.Main.make = function (_elm) {
    };
    var dt = 1.0e-2;
    var update = function (model) {
-      var angAcc = model.gravity / model.length * $Basics.sin(model.angle);
+      var angAcc = -1.0 * (model.gravity / model.length) * $Basics.sin(model.angle);
       var angVel$ = model.angVel + angAcc * dt;
       var angle$ = model.angle + angVel$ * dt;
       return _U.update(model,{angle: angle$,angVel: angVel$});
