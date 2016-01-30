@@ -41,8 +41,9 @@ view model =
             |> traced { defaultLine | width = 2, color = red }
         , circle 8
             |> filled blue
-        , circle 5
+        , ngon 3 10
             |> filled green
+            |> rotate (pi/2)
             |> move endPoint
         ]
   in
