@@ -5567,7 +5567,7 @@ Elm.Main.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Time = Elm.Time.make(_elm);
    var _op = {};
-   var init = {angle: $Basics.pi / 2,angVel: 0.0,length: 2,gravity: -9.81};
+   var init = {angle: 3 * $Basics.pi / 4,angVel: 0.0,length: 2,gravity: -9.81};
    var Model = F4(function (a,b,c,d) {    return {angle: a,angVel: b,length: c,gravity: d};});
    var scale = 100;
    var view = function (model) {
@@ -5578,7 +5578,9 @@ Elm.Main.make = function (_elm) {
                                                      ,A2($Graphics$Collage.filled,$Color.blue,$Graphics$Collage.circle(8))
                                                      ,A2($Graphics$Collage.move,
                                                      endPoint,
-                                                     A2($Graphics$Collage.filled,$Color.green,$Graphics$Collage.circle(5)))]));
+                                                     A2($Graphics$Collage.rotate,
+                                                     $Basics.pi / 2,
+                                                     A2($Graphics$Collage.filled,$Color.green,A2($Graphics$Collage.ngon,3,10))))]));
       return A3($Graphics$Collage.collage,700,500,_U.list([A2($Graphics$Collage.rotate,model.angle,pendulum)]));
    };
    var dt = 1.0e-2;
