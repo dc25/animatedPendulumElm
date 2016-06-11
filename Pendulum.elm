@@ -1,7 +1,9 @@
 import Color exposing (..)
-import Graphics.Collage exposing (..)
-import Graphics.Element exposing (..)
+import Collage exposing (..)
+import Element exposing (..)
+import Html exposing (..)
 import Time exposing (..)
+import Html.App exposing (program)
 
 dt = 0.01
 scale = 100
@@ -13,25 +15,32 @@ type alias Model =
   , gravity : Float
   }
 
-init =
-  { angle = 3 * pi / 4
-  , angVel = 0.0
-  , length = 2
-  , gravity = -9.81
-  }
+type Msg 
+    = Tick Time
 
-update : Model -> Model
-update model =
+init : (Model,Cmd Msg)
+init =
+  ( { angle = 3 * pi / 4
+    , angVel = 0.0
+    , length = 2
+    , gravity = -9.81
+    }
+  , Cmd.none)
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update _ model =
   let
     angAcc = -1.0 * (model.gravity / model.length) * sin (model.angle)
     angVel' = model.angVel + angAcc * dt
     angle' = model.angle + angVel' * dt
   in
-    { model
-      | angle = angle'
-      , angVel = angVel'
-    }
+    ( { model
+        | angle = angle'
+        , angVel = angVel'
+      }
+    , Cmd.none )
 
+view : Model -> Html Msg
 view model =
   let
     endPoint = ( 0, scale * model.length )
@@ -47,9 +56,18 @@ view model =
             |> move endPoint
         ]
   in
-    collage 700 500
-      [ pendulum |> rotate model.angle ]
+    toHtml <|
+      collage 700 500
+        [ pendulum |> rotate model.angle ]
+
+subscriptions : Model -> Sub Msg
+subscriptions _ = 
+    Time.every (dt * second) Tick
 
 main =
-  Signal.foldp (\_ model -> update model) init (every (dt * second))
-    |> Signal.map view
+  program 
+      { init = init
+      , view = view
+      , update = update
+      , subscriptions = subscriptions
+      }
